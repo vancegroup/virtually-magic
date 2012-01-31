@@ -3,7 +3,7 @@ require("Actions")
 vrjLua.appendToModelSearchPath(getScriptFilename())
 
 
-dofile([[C:\Documents and Settings\All Users\Documents\TRLT-copy\simpleLights.lua]])
+dofile([[C:\Users\jpeters\Desktop\src\virtually-magic\simpleLights.lua]])
 drawXform = Transform{}
 RelativeTo.World:addChild(drawXform)
 
