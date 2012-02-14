@@ -1,22 +1,26 @@
 require("getScriptFilename")
 require("Actions")
 vrjLua.appendToModelSearchPath(getScriptFilename())
+dofile(vrjLua.findInModelSearchPath("simpleLights.lua"))
 
-
-dofile([[C:\Users\jpeters\Desktop\src\virtually-magic\simpleLights.lua]])
 drawXform = Transform{}
 RelativeTo.World:addChild(drawXform)
 
 roomRequirement = Transform{ 
 	scale = .5,
 	position = {14.5,4-.56763,10}, 
-	Model([[room of requirements.osg]]),
+	Model([[Hogwarts Models/OSG/Room of Requirement/room of requirements.osg]]),
 }
+--Required Line in COMPUTER ENVIRONMENT/Debugging ONLY
+--RelativeTo.World:addChild(roomRequirement)
+
 greatHall =Transform{
 	 Transform{ position = {0,0,0},	orientation = AngleAxis(Degrees(90), Axis{0.0, 1.0, 0.0}),
-	 Model([[greathall.osg]])}
+	 Model([[Hogwarts Models/OSG/Great Hall/greathall.osg]]),
+	 }
 }
-
+--Required Line in COMPUTER ENVIRONMENT/Debugging ONLY
+RelativeTo.World:addChild(greatHall)
 
 --add a wiimote clear button (home button)
 Actions.addFrameAction(

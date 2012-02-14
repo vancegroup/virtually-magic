@@ -11,11 +11,12 @@ RelativeTo.World:addChild(drawXform)
 roomRequirement = Transform{ 
 	scale = .5,
 	position = {14.5,4-.56763,10}, 
-	Model([[room of requirements.osg]]),
+	Model([[Hogwarts Models/OSG/Room of Requirement/room of requirements.osg]]),
 }
 greatHall =Transform{
 	 Transform{ position = {0,0,0},	orientation = AngleAxis(Degrees(90), Axis{0.0, 1.0, 0.0}),
-	 Model([[greathall.osg]])}
+	 Model([[Hogwarts Models/OSG/Great Hall/greathall.osg]]),
+	 }
 }
 
 
