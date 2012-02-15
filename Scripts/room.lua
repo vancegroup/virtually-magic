@@ -1,7 +1,7 @@
 require("getScriptFilename")
 require("Actions")
 vrjLua.appendToModelSearchPath(getScriptFilename())
-dofile(vrjLua.findInModelSearchPath("simpleLights.lua"))
+dofile(vrjLua.findInModelSearchPath([[Effects/simpleLights.lua]]))
 
 drawXform = Transform{}
 RelativeTo.World:addChild(drawXform)
@@ -20,7 +20,7 @@ greatHall =Transform{
 	 }
 }
 --Required Line in COMPUTER ENVIRONMENT/Debugging ONLY
-RelativeTo.World:addChild(greatHall)
+--RelativeTo.World:addChild(greatHall)
 
 --add a wiimote clear button (home button)
 Actions.addFrameAction(
