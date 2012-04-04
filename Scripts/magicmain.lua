@@ -14,11 +14,49 @@ local device = gadget.PositionInterface("VJWand")
 --Home:"name(METaL)=WMButtonHome":"name(Computer)=":clear drawing
 
 roomRequirement = Transform{
-	position={0,0,0},
+	position={4.5,0,0},
 	orientation=AngleAxis(Degrees(-90), Axis{0.0,0.0,0.0}),
-	scale=.2,
+	scale=.5,
 	Model([[../../Hogwarts Models/OSG/Room of Requirement/room of requirements expanded.ive]]),
 }
 RelativeTo.World:addChild(roomRequirement)
 
+hiddenDoor = Transform{
+	position={4.5,0,0},
+	orientation=AngleAxis(Degrees(-90), Axis{0.0,0.0,0.0}),
+	scale=.5,
+	Model([[../../Hogwarts Models/OSG/Room of Requirement/hiddenbookshelf.ive]]),
+}
+RelativeTo.World:addChild(hiddenDoor)
 
+
+positionTrack = osg.MatrixTransform()
+RelativeTo.Room:addChild(positionTrack)
+
+updatepositionTrack = function()
+	while true do
+		positionTrack:setMatrix(device.matrix)
+		Actions.waitForRedraw()
+	end
+end
+
+hiddenSwitch1 = function()
+	while true do
+		track = positionTrack:getMatrix():getTrans()
+		--Remove hidden door
+			if (track:x()> 3.09 and track:x()< 4.2 and track:z()> -2.61 and track:z()< -1.37 ) then
+				RelativeTo.World:removeChild(hiddenDoor)
+				print("Open!")
+				break
+			end
+		Actions.waitForRedraw()
+		-- --Add hidden door
+			-- if (newPos:x()> and newPos:x()< and newPos:z()> and newPos:z()< ) then
+				-- RelativeTo.Room:addChild(hiddenDoor)
+				-- break
+		-- Actions.waitForRedraw()
+	end
+end
+
+Actions.addFrameAction(updatepositionTrack)
+Actions.addFrameAction(hiddenSwitch1)
