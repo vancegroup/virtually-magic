@@ -47,9 +47,10 @@ hiddenSwitch1OFF = function()
 		Actions.waitForRedraw()
 	end
 	Actions.addFrameAction(hiddenSwitch1ON)
+	--Necessary to add, otherwise, will never re-open
 end
 
-
+-- For debugging purposes, DO NOT USE in demo mode, slows program down considerably
 -- printPos = function()
 	-- local checkPos = gadget.DigitalInterface("VJButton1")
 	-- while true do
