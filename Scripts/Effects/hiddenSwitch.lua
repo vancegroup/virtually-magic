@@ -51,20 +51,20 @@ hiddenSwitch1OFF = function()
 end
 
 -- For debugging purposes, DO NOT USE in demo mode, slows program down considerably
-printPos = function()
-	local checkPos = gadget.DigitalInterface("VJButton1")
-	while true do
-		--keep drawing scene until button pressed
-		repeat
-			Actions.waitForRedraw()
-		until checkPos.justPressed
-			print(track)
-		end
-end
+-- printPos = function()
+	-- local checkPos = gadget.DigitalInterface("WMButtonB")
+	-- while true do
+		-- --keep drawing scene until button pressed
+		-- repeat
+			-- Actions.waitForRedraw()
+		-- until checkPos.justPressed
+			-- print(track)
+		-- end
+-- end
 			
 
 Actions.addFrameAction(updatepositionTrack)
 Actions.addFrameAction(hiddenSwitch1ON)
 Actions.addFrameAction(hiddenSwitch1OFF)
-Actions.addFrameAction(printPos)
+--Actions.addFrameAction(printPos)
 
