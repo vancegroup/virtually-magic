@@ -5,7 +5,7 @@ vrjLua.appendToModelSearchPath(getScriptFilename())
 local device = gadget.PositionInterface("VJWand")
 
 hiddenDoor = Transform{
-	position={4.5,0,0},
+	position={0,0,0},
 	orientation=AngleAxis(Degrees(-90), Axis{0.0,0.0,0.0}),
 	scale=.5,
 	Model([[../../Hogwarts Models/OSG/Room of Requirement/hiddenbookshelf.ive]]),
@@ -23,7 +23,7 @@ end
 hiddenSwitch1ON = function()
 	while true do
 		--Remove hidden door
-			if (track:x()> -5.45 and track:x()< -2.8 and track:z()> -20.3 and track:z()< -18.1 ) then
+			if (track:x()> -9.95 and track:x()< -7.3 and track:z()> -20.3 and track:z()< -18.1 ) then
 				RelativeTo.World:removeChild(hiddenDoor)
 				print("Open!")
 				isOpen = true
@@ -51,20 +51,20 @@ hiddenSwitch1OFF = function()
 end
 
 -- For debugging purposes, DO NOT USE in demo mode, slows program down considerably
--- printPos = function()
-	-- local checkPos = gadget.DigitalInterface("VJButton1")
-	-- while true do
-		-- --keep drawing scene until button pressed
-		-- repeat
-			-- Actions.waitForRedraw()
-		-- until checkPos.justPressed
-			-- print(track)
-		-- end
--- end
+printPos = function()
+	local checkPos = gadget.DigitalInterface("VJButton1")
+	while true do
+		--keep drawing scene until button pressed
+		repeat
+			Actions.waitForRedraw()
+		until checkPos.justPressed
+			print(track)
+		end
+end
 			
 
 Actions.addFrameAction(updatepositionTrack)
 Actions.addFrameAction(hiddenSwitch1ON)
 Actions.addFrameAction(hiddenSwitch1OFF)
--- Actions.addFrameAction(printPos)
+Actions.addFrameAction(printPos)
 

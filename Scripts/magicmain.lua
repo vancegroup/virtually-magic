@@ -15,7 +15,7 @@ local device = gadget.PositionInterface("VJWand")
 --Home:"name(METaL)=WMButtonHome":"name(Computer)=":clear drawing
 
 roomRequirement = Transform{
-	position={4.5,0,0},
+	position={0,0,0},
 	orientation=AngleAxis(Degrees(-90), Axis{0.0,0.0,0.0}),
 	scale=.5,
 	Model([[../../Hogwarts Models/OSG/Room of Requirement/room of requirements expanded.ive]]),

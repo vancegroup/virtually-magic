@@ -38,14 +38,14 @@ lightsource4:setLight(light4)
 --Set background lighting low
 light1:setAmbient(osg.Vec4(0.1, 0.1, 0.1, .5))
 --Set directed lighting to higher intensity
-light2:setAmbient(osg.Vec4(.5,.6,1,.5))
+light2:setAmbient(osg.Vec4(.6,.9,1,.5))
 --Set regular background to higher intensity
 light3:setAmbient(osg.Vec4(.8, .8, 0.8, 1))
 light4:setAmbient(osg.Vec4(.6, .6, 0.6, 1))
 
 --set diffuse lighting
 light1:setDiffuse(osg.Vec4(.1, .1, .1, .5))
-light2:setDiffuse(osg.Vec4(.3,.5,.8,.5))
+light2:setDiffuse(osg.Vec4(.3,.7,.9,.5))
 
 --Set attenuation (different amounts of light depending on distance)
 --Combine constant, linear and quadratic attenuation for desired effect
@@ -72,7 +72,7 @@ light1:setPosition(osg.Vec4(2,3,8, 1.0))
 
 --Set width of beam of directed light
 --90 yeilds half sphere, 20 yeilds narrow beam
-light2:setSpotCutoff(5)
+light2:setSpotCutoff(7)
 --Set definition of beam edge
 --A higher SpotExponent softens the light at the outer edges of the beam
 light2:setSpotExponent(100)			
@@ -90,7 +90,8 @@ end
 
 updateFlashLightPos = function()
 	while true do
-		local newPos = xform:getMatrix():getTrans()
+		local pos = xform:getMatrix():getTrans()
+		local newPos = pos-osgnav.position
 		light2:setDirection(osg.Vec3(device.forwardVector:x(),device.forwardVector:y(),device.forwardVector:z()))
 		light2:setPosition(osg.Vec4(newPos:x(), newPos:y(), (newPos:z()), 1.0))
 		Actions.waitForRedraw()
