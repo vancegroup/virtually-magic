@@ -1,3 +1,4 @@
+--OLD RLT Version with switching room capabilities
 require("getScriptFilename")
 require("Actions")
 vrjLua.appendToModelSearchPath(getScriptFilename())
