@@ -41,7 +41,6 @@ boggart = TransparentGroup{
 	alpha = .7,
 	dementor
 }
---RelativeTo.World:addChild(boggart)
 
 updatepositionTrack = function()
 	while true do
@@ -70,17 +69,13 @@ end
 
 moveGhost = function()
 	while true do
-		--Re-add hidden door
 			if (ghostPresent==true and (((dementor:getPosition()):z())<24)) then
 				dementor:setPosition(osg.Vec3d((dementor:getPosition()):x(), (dementor:getPosition()):y(), ((dementor:getPosition()):z()+.2)),1)
-				--dementor:setScale(osg.Vec3d((((dementor:getScale()):x())*1.01),(((dementor:getScale()):y())*1.01),(((dementor:getScale()):z())*1.2)),1)
 				Actions.waitForRedraw()
 			end
 		Actions.waitForRedraw()
 	end
-	--Necessary to add, otherwise, will never re-open
 end
 
 Actions.addFrameAction(updatepositionTrack)
 Actions.addFrameAction(ghostAppear)
---Actions.addFrameAction(hiddenSwitch1OFF)
