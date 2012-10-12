@@ -5,6 +5,9 @@ vrjLua.appendToModelSearchPath(getScriptFilename())
 dofile(vrjLua.findInModelSearchPath([[Effects/lumos.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/draw.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/hiddenSwitch.lua]]))
+dofile(vrjLua.findInModelSearchPath([[Effects/snitchmove.lua]]))
+dofile(vrjLua.findInModelSearchPath([[Effects/painting_move.lua]]))
+dofile(vrjLua.findInModelSearchPath([[BackgroundSound.lua]]))
 local device = gadget.PositionInterface("VJWand")
 
 --Button Descriptions:
@@ -13,6 +16,8 @@ local device = gadget.PositionInterface("VJWand")
 --Plus:"name(METaL)=WMButtonPlus":"name(Computer)=":lumos effect
 --Minus:"name(METaL)=WMButtonMinus":"name(Computer)="
 --Home:"name(METaL)=WMButtonHome":"name(Computer)=":clear drawing
+
+startBackgroundSound()
 
 roomRequirement = Transform{
 	position={0,0,0},
@@ -53,11 +58,11 @@ ghostPresent = false
 
 ghostAppear = function()
 	while true do
-		--Remove hidden door
-			if (track:x()> -13.3 and track:x()< -11.1 and track:z()< -11 and ghostPresent==false) then
+			if (track:x()> -13.3 and track:x()< -11.1 and track:z()< -10.5 and ghostPresent==false) then
 				RelativeTo.World:addChild(boggart)
 				print("Boo!")
 				ghostPresent = true
+				PlayDementor()
 				break
 			end
 		Actions.waitForRedraw()
@@ -67,11 +72,11 @@ ghostAppear = function()
 end
 
 
-moveGhost = function()
+moveGhost = function(dt)
 	while true do
 			if (ghostPresent==true and (((dementor:getPosition()):z())<24)) then
-				dementor:setPosition(osg.Vec3d((dementor:getPosition()):x(), (dementor:getPosition()):y(), ((dementor:getPosition()):z()+.2)),1)
-				Actions.waitForRedraw()
+				dementor:setPosition(osg.Vec3d((dementor:getPosition()):x()+.95*dt, (dementor:getPosition()):y()-.04*dt, ((dementor:getPosition()):z()+ 4.1*dt--[[.25]])),1)
+				dt = Actions.waitForRedraw()
 			end
 		Actions.waitForRedraw()
 	end

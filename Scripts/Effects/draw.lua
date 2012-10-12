@@ -72,6 +72,7 @@ do
 				local vertices, colors, linestrip, geom = drawNewLine(width)
 
 				while drawBtn.pressed do
+					PlayDraw()
 					local pos = device.position - osgnav.position
 					addPoint(osg.Vec3(pos:x(), pos:y(), pos:z()), vertices, colors, linestrip, geom)
 					Actions.waitForRedraw()

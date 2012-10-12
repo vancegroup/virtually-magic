@@ -106,7 +106,8 @@ lightONandOFF = function()
 		repeat
 			Actions.waitForRedraw()
 		until drawBtn.justPressed
-		
+		--lumos sound effect
+			PlayLumos()
 		-- turn on the light
 			lightsource2:setLocalStateSetModes(osg.StateAttribute.Values.ON)
 			stateSet:setAssociatedModes(light2, osg.StateAttribute.Values.ON)

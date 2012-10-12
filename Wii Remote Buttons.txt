@@ -1,0 +1,8 @@
+To start app, load "magicmain_METAL.lua"
+
+Button Descriptions:
+A: flying effect
+B: drawing effect
+Home: clear drawing
+Plus: lumos effect
+Minus:

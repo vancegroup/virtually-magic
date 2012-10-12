@@ -106,7 +106,7 @@ lightONandOFF = function()
 		repeat
 			Actions.waitForRedraw()
 		until drawBtn.justPressed
-		
+			PlayLumos()
 		-- turn on the light
 			lightsource2:setLocalStateSetModes(osg.StateAttribute.Values.ON)
 			stateSet:setAssociatedModes(light2, osg.StateAttribute.Values.ON)
@@ -118,14 +118,14 @@ lightONandOFF = function()
 		repeat
 			Actions.waitForRedraw()
 		until drawBtn.justPressed
-	
 		--turn off the light
+			offLumos()
 			lightsource2:setLocalStateSetModes(osg.StateAttribute.Values.OFF)
 			stateSet:setAssociatedModes(light2, osg.StateAttribute.Values.OFF)
 			lightsource3:setLocalStateSetModes(osg.StateAttribute.Values.ON)
 			stateSet:setAssociatedModes(light3, osg.StateAttribute.Values.ON)
 			lightsource4:setLocalStateSetModes(osg.StateAttribute.Values.ON)
-			stateSet:setAssociatedModes(light4, osg.StateAttribute.Values.ON)		
+			stateSet:setAssociatedModes(light4, osg.StateAttribute.Values.ON)
 		end
 end
 

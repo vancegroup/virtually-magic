@@ -24,6 +24,7 @@ hiddenSwitch1ON = function()
 	while true do
 		--Remove hidden door
 			if (track:x()> -9.95 and track:x()< -7.3 and track:z()> -20.3 and track:z()< -18.1 ) then
+				PlayBookshelf()
 				RelativeTo.World:removeChild(hiddenDoor)
 				print("Open!")
 				isOpen = true
@@ -39,6 +40,7 @@ hiddenSwitch1OFF = function()
 	while true do
 		--Re-add hidden door
 			if (track:x()< -2.8 and (track:z()< -20.3 or track:z()> -18.1 ) and (isOpen == true)) then
+				PlayBookshelf()
 				RelativeTo.World:addChild(hiddenDoor)
 				print("Close!")
 				isOpen=false
