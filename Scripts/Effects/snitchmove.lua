@@ -29,7 +29,7 @@ snitch_move = function()
 			func = Transformation.move_slow(snitch,3.5,newPos:x(),newPos:y(),newPos:z())
 			func()
 			--the next line adjusts a random value the snitch will wait, from .5 to 1.2 seconds - feel free to change these values
-			Actions.waitSeconds(math.random(.5,1.2))
+			Actions.waitSeconds(math.random(1.0,1.7))
 			Actions.waitForRedraw()
 		end
 	end
