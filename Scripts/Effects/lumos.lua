@@ -32,6 +32,14 @@ light4 = osg.Light()
 light4:setLightNum(3)
 lightsource4 = osg.LightSource()
 lightsource4:setLight(light4)
+light5 = osg.Light()
+light5:setLightNum(4)
+lightsource5 = osg.LightSource()
+lightsource5:setLight(light5)
+light6 = osg.Light()
+light6:setLightNum(4)
+lightsource6 = osg.LightSource()
+lightsource6:setLight(light6)
 
 --Set ambient lighting - [R,G,B,A]
 --Default: -- 0.05 0.05 0.05 1
@@ -42,6 +50,8 @@ light2:setAmbient(osg.Vec4(.6,.9,1,.5))
 --Set regular background to higher intensity
 light3:setAmbient(osg.Vec4(.8, .8, 0.8, 1))
 light4:setAmbient(osg.Vec4(.6, .6, 0.6, 1))
+light5:setAmbient(osg.Vec4(.3, .3, 0.3, 1))
+light6:setAmbient(osg.Vec4(.3, .3, 0.3, 1))
 
 --set diffuse lighting
 light1:setDiffuse(osg.Vec4(.1, .1, .1, .5))
@@ -62,12 +72,20 @@ lightsource3:setLocalStateSetModes(osg.StateAttribute.Values.ON)
 stateSet:setAssociatedModes(light3, osg.StateAttribute.Values.ON)
 lightsource4:setLocalStateSetModes(osg.StateAttribute.Values.ON)
 stateSet:setAssociatedModes(light4, osg.StateAttribute.Values.ON)
+lightsource5:setLocalStateSetModes(osg.StateAttribute.Values.ON)
+stateSet:setAssociatedModes(light5, osg.StateAttribute.Values.ON)
+lightsource6:setLocalStateSetModes(osg.StateAttribute.Values.ON)
+stateSet:setAssociatedModes(light6, osg.StateAttribute.Values.ON)
 RelativeTo.World:addChild(lightsource1)
 RelativeTo.World:addChild(lightsource3)
 RelativeTo.World:addChild(lightsource4)
+RelativeTo.World:addChild(lightsource5)
+RelativeTo.World:addChild(lightsource6)
 
 light3:setPosition(osg.Vec4(5.5, 2, 9, 1.0))
 light4:setPosition(osg.Vec4(-10,4-.56763+2,9, 1.0))
+light5:setPosition(osg.Vec4(-12, 2,-11, 1.0))
+light6:setPosition(osg.Vec4(-1, 2,-21, 1.0))
 light1:setPosition(osg.Vec4(2,3,8, 1.0))
 
 --Set width of beam of directed light
@@ -114,7 +132,11 @@ lightONandOFF = function()
 			lightsource3:setLocalStateSetModes(osg.StateAttribute.Values.OFF)
 			stateSet:setAssociatedModes(light3, osg.StateAttribute.Values.OFF)
 			lightsource4:setLocalStateSetModes(osg.StateAttribute.Values.OFF)
-			stateSet:setAssociatedModes(light4, osg.StateAttribute.Values.OFF)		
+			stateSet:setAssociatedModes(light4, osg.StateAttribute.Values.OFF)	
+			lightsource5:setLocalStateSetModes(osg.StateAttribute.Values.OFF)
+			stateSet:setAssociatedModes(light5, osg.StateAttribute.Values.OFF)	
+			lightsource6:setLocalStateSetModes(osg.StateAttribute.Values.OFF)
+			stateSet:setAssociatedModes(light6, osg.StateAttribute.Values.OFF)				
 		--keep drawing scene until button pressed
 		repeat
 			Actions.waitForRedraw()
@@ -127,6 +149,10 @@ lightONandOFF = function()
 			stateSet:setAssociatedModes(light3, osg.StateAttribute.Values.ON)
 			lightsource4:setLocalStateSetModes(osg.StateAttribute.Values.ON)
 			stateSet:setAssociatedModes(light4, osg.StateAttribute.Values.ON)		
+			lightsource5:setLocalStateSetModes(osg.StateAttribute.Values.ON)
+			stateSet:setAssociatedModes(light5, osg.StateAttribute.Values.ON)	
+			lightsource6:setLocalStateSetModes(osg.StateAttribute.Values.ON)
+			stateSet:setAssociatedModes(light6, osg.StateAttribute.Values.ON)	
 		end
 end
 
