@@ -15,7 +15,8 @@ isOpen = false
 
 updatepositionTrack = function()
 	while true do
-		track = device.position - osgnav.position
+		track = RelativeTo.World:getInverseMatrix():preMult(device.position)
+		--track = device.position - osgnav.position
 		Actions.waitForRedraw()
 	end
 end

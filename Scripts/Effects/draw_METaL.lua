@@ -73,7 +73,7 @@ do
 
 				while drawBtn.pressed do
 					PlayDraw()
-					local pos = device.position - osgnav.position
+					local pos = RelativeTo.World:getInverseMatrix():preMult(device.position)
 					addPoint(osg.Vec3(pos:x(), pos:y(), pos:z()), vertices, colors, linestrip, geom)
 					Actions.waitForRedraw()
 				end
