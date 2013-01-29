@@ -7,6 +7,7 @@ dofile(vrjLua.findInModelSearchPath([[Effects/draw_METaL.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/hiddenSwitch.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/snitchmove.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/painting_move.lua]]))
+dofile(vrjLua.findInModelSearchPath([[Effects/rotate.lua]]))
 dofile(vrjLua.findInModelSearchPath([[BackgroundSound.lua]]))
 local device = gadget.PositionInterface("VJWand")
 
@@ -14,7 +15,7 @@ local device = gadget.PositionInterface("VJWand")
 --A:"name(METaL)=WMButtonA":"name(Computer)=VJButton0":flying effect
 --B:"name(METaL)=WMButtonB":"name(Computer)=VJButton1":drawing effect
 --Plus:"name(METaL)=WMButtonPlus":"name(Computer)=":lumos effect
---Minus:"name(METaL)=WMButtonMinus":"name(Computer)="
+--Minus:"name(METaL)=WMButtonMinus":"name(Computer)=":rotate
 --Home:"name(METaL)=WMButtonHome":"name(Computer)=":clear drawing
 
 startBackgroundSound()
@@ -49,7 +50,8 @@ boggart = TransparentGroup{
 
 updatepositionTrack = function()
 	while true do
-		track = device.position - osgnav.position
+		--track = device.position - osgnav.position
+		track = RelativeTo.World:getInverseMatrix():preMult(device.position)
 		Actions.waitForRedraw()
 	end
 end
