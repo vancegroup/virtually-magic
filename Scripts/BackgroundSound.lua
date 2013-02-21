@@ -1,4 +1,4 @@
-print("Loading PlaySound.lua. Wav files must be 16bit float.")
+--print("Loading PlaySound.lua. Wav files must be 16bit float.")
 require("getScriptFilename")
 vrjLua.appendToModelSearchPath(getScriptFilename())
 
@@ -34,11 +34,11 @@ end
 function startBackgroundSound()
 	Actions.addFrameAction(
 		function()
-			local my_sound = SoundWav(vrjLua.findInModelSearchPath("Sound/friends.wav"))
+			local my_sound = SoundWav(vrjLua.findInModelSearchPath("Sound/magic3.wav"))
 			while true do
 				--loop and play the sound over and over
 				if (my_sound.isPlaying == false) then
-					--print("Triggering sound.")
+					print("Triggering sound.")
 					my_sound:trigger(1)
 				end
 				Actions.waitForRedraw()
