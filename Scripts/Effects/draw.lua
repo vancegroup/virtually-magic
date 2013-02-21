@@ -77,7 +77,7 @@ do
 					addPoint(osg.Vec3(pos:x(), pos:y(), pos:z()), vertices, colors, linestrip, geom)
 					Actions.waitForRedraw()
 				end
-				
+				offDraw()
 				--OK, that line has been finalized, we can use display lists now.
 				geom:setUseDisplayList(true)
 			end
