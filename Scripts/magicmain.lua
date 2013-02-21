@@ -2,13 +2,17 @@ require("Actions")
 require("TransparentGroup")
 require("getScriptFilename")
 vrjLua.appendToModelSearchPath(getScriptFilename())
+
+dofile(vrjLua.findInModelSearchPath([[Effects/NavFly.lua]]))
+--dofile(vrjLua.findInModelSearchPath([[Effects/NavWalk.lua]]))
+dofile(vrjLua.findInModelSearchPath([[Effects/rotateWand.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/lumos.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/draw.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/hiddenSwitch.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/snitchmove.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/painting_move.lua]]))
-dofile(vrjLua.findInModelSearchPath([[Effects/rotate.lua]]))
 dofile(vrjLua.findInModelSearchPath([[BackgroundSound.lua]]))
+dofile(vrjLua.findInModelSearchPath([[Effects/help.lua]]))
 local device = gadget.PositionInterface("VJWand")
 
 --Button Descriptions:
@@ -50,7 +54,6 @@ boggart = TransparentGroup{
 
 updatepositionTrack = function()
 	while true do
-		--track = device.position - osgnav.position
 		track = RelativeTo.World:getInverseMatrix():preMult(device.position)
 		Actions.waitForRedraw()
 	end
