@@ -7,12 +7,12 @@ dofile(vrjLua.findInModelSearchPath([[Effects/NavFly.lua]]))
 --dofile(vrjLua.findInModelSearchPath([[Effects/NavWalk.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/rotateWand.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/lumos.lua]]))
-dofile(vrjLua.findInModelSearchPath([[Effects/draw.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/hiddenSwitch.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/snitchmove.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/painting_move.lua]]))
 dofile(vrjLua.findInModelSearchPath([[BackgroundSound.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/help.lua]]))
+dofile(vrjLua.findInModelSearchPath([[Effects/Drawing.lua]]))
 local device = gadget.PositionInterface("VJWand")
 
 --Button Descriptions:
@@ -23,6 +23,9 @@ local device = gadget.PositionInterface("VJWand")
 --Home:"name(METaL)=WMButtonHome":"name(Computer)=":clear drawing
 
 startBackgroundSound()
+mydraw = DrawingTool{}
+
+mydraw:startDrawing()
 
 roomRequirement = Transform{
 	position={0,0,0},
