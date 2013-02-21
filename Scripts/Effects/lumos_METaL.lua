@@ -118,7 +118,8 @@ end
 --Actions.addFrameAction(updateFlashLightPos)
 
 lightONandOFF = function()
-	local drawBtn = gadget.DigitalInterface("VJButton2")
+	--local drawBtn = gadget.DigitalInterface("VJButton2")
+	local drawBtn = gadget.DigitalInterface("WMButtonPlus")
 	while true do
 		--keep drawing scene until button pressed
 		repeat
@@ -141,7 +142,7 @@ lightONandOFF = function()
 		repeat
 			Actions.waitForRedraw()
 		until drawBtn.justPressed
-	
+			offLumos()
 		--turn off the light
 			lightsource2:setLocalStateSetModes(osg.StateAttribute.Values.OFF)
 			stateSet:setAssociatedModes(light2, osg.StateAttribute.Values.OFF)
