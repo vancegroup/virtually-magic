@@ -19,7 +19,7 @@ Actions.addFrameAction(
 		local wand = gadget.PositionInterface('VJWand')
 		local device = gadget.DigitalInterface("VJButton0")
 		local dt = dt
-		local rate = 3
+		local rate = 1.5
 		while true do
 			repeat
 				dt = Actions.waitForRedraw()
