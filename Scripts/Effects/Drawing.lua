@@ -33,7 +33,7 @@ local getRainbowColor = coroutine.wrap(function()
 end)
 
 function DrawingIndex:updateMarker()
-	self.marker.Child[1] = SphereMarker{radius = .1, color = self.color}
+	self.marker.Child[1] = SphereMarker{radius = .01, color = self.color}
 end
 
 function DrawingIndex:createOSG()
@@ -72,10 +72,12 @@ function DrawingIndex:startDrawing()
 				until self.drawbutton.justPressed
 				local vertices, colors, linestrip, geom = self:drawNewLine()
 				while self.drawbutton.pressed do
+					PlayDraw()
 					local pos = RelativeTo.World:getInverseMatrix():preMult(self.device.position)
 					self:addPoint(osg.Vec3(pos:x(), pos:y(), pos:z()), vertices, colors, linestrip, geom)
 					Actions.waitForRedraw()
 				end
+				offDraw()
 				geom:setUseDisplayList(true)
 			end
 		end
@@ -156,6 +158,7 @@ DrawingTool = function(draw)
 		draw.changeColor_func = true
 	end
 	draw.device = draw.device or gadget.PositionInterface("VJWand")
+	print(draw.metal)
 	if draw.metal then
 		print("Using default METAL devices")
 		if draw.drawbutton == nil and draw.clearbutton == nil and draw.changeColor_button == nil then
@@ -166,7 +169,7 @@ DrawingTool = function(draw)
 		end
 		draw.drawbutton = draw.drawbutton or gadget.DigitalInterface("WMButtonB")
 		draw.clearbutton = draw.clearbutton or gadget.DigitalInterface("WMButtonHome")
-		draw.changeColor_button = draw.changeColor_button or gadget.DigitalInterface("VJButtonPlus")
+		draw.changeColor_button = draw.changeColor_button or gadget.DigitalInterface("WMButton1")
 	else
 		if draw.drawbutton == nil and draw.clearbutton == nil and draw.changeColor_button == nil then
 			print("Using default workstation devices")
@@ -179,7 +182,7 @@ DrawingTool = function(draw)
 		draw.changeColor_button = draw.changeColor_button or gadget.DigitalInterface("VJButton1")
 	end
 	draw.color = draw.color or {1,1,0,1}
-	draw.marker = Transform{SphereMarker{radius = .1, color = draw.color}}
+	draw.marker = Transform{SphereMarker{radius = .01, color = draw.color}}
 	draw.linewidth = draw.linewidth or 10 
 	setmetatable(draw, DIMT)
 	draw:createOSG()
