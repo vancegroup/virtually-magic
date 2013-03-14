@@ -3,8 +3,8 @@ require("TransparentGroup")
 require("getScriptFilename")
 vrjLua.appendToModelSearchPath(getScriptFilename())
 
-dofile(vrjLua.findInModelSearchPath([[Effects/NavFly.lua]]))
---dofile(vrjLua.findInModelSearchPath([[Effects/NavWalk.lua]]))
+--dofile(vrjLua.findInModelSearchPath([[Effects/NavFly.lua]]))
+dofile(vrjLua.findInModelSearchPath([[Effects/NavWalk.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/rotateWand.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/lumos.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/hiddenSwitch.lua]]))
@@ -24,7 +24,6 @@ local device = gadget.PositionInterface("VJWand")
 
 startBackgroundSound()
 mydraw = DrawingTool{}
-
 mydraw:startDrawing()
 
 roomRequirement = Transform{
@@ -83,7 +82,7 @@ end
 moveGhost = function(dt)
 	while true do
 			if (ghostPresent==true and (((dementor:getPosition()):z())<24)) then
-				dementor:setPosition(osg.Vec3d((dementor:getPosition()):x()+.95*dt, (dementor:getPosition()):y()-.04*dt, ((dementor:getPosition()):z()+ 4*dt--[[.25]])),1)
+				dementor:setPosition(osg.Vec3d((dementor:getPosition()):x()+.95*dt, (dementor:getPosition()):y()-.3*dt, ((dementor:getPosition()):z()+ 4*dt--[[.25]])),1)
 				dt = Actions.waitForRedraw()
 			end
 		Actions.waitForRedraw()
