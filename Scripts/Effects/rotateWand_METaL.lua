@@ -20,7 +20,7 @@ Actions.addFrameAction(
 		while true do
 			repeat
 				dt = Actions.waitForRedraw()
-			until device.pressed
+			until device.pressed or device2.pressed
 			
 			local wandForward = osg.Vec3d(wand.forwardVector:x(),0,wand.forwardVector:z())
 			local rotateMax = osg.Quat()
