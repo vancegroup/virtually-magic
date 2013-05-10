@@ -82,6 +82,7 @@ light2:setSpotExponent(100)
 RelativeTo.World:addChild(lightsource2)
 
 updateposTrack = function()
+	local device = gadget.PositionInterface("VJWand")
 	while true do
 		local track = RelativeTo.World:getInverseMatrix():preMult(device.position)
 		light2:setPosition(osg.Vec4(track:x(),track:y(),track:z(),1))
@@ -93,7 +94,7 @@ Actions.addFrameAction(updateposTrack)
 
 lightONandOFF = function()
 	local drawBtn = gadget.DigitalInterface("VJButton1")
-	-- local drawBtn = gadget.DigitalInterface("WMButtonPlus")
+	-- local drawBtn = gadget.DigitalInterface("WMButtonUp")
 	while true do
 		-- keep drawing scene until button pressed
 		repeat

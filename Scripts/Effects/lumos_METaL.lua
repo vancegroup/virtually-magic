@@ -93,7 +93,7 @@ Actions.addFrameAction(updateposTrack)
 
 lightONandOFF = function()
 	--local drawBtn = gadget.DigitalInterface("VJButton1")
-	local drawBtn = gadget.DigitalInterface("WMButtonMinus")
+	local drawBtn = gadget.DigitalInterface("WMButtonUp")
 	while true do
 		-- keep drawing scene until button pressed
 		repeat
