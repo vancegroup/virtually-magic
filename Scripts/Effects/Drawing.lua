@@ -168,7 +168,7 @@ DrawingTool = function(draw)
 			print("Trigger (B) - Draw")
 		end
 		draw.drawbutton = draw.drawbutton or gadget.DigitalInterface("WMButtonB")
-		draw.clearbutton = draw.clearbutton or gadget.DigitalInterface("WMButtonHome")
+		draw.clearbutton = draw.clearbutton or gadget.DigitalInterface("WMButtonMinus")
 		draw.changeColor_button = draw.changeColor_button or gadget.DigitalInterface("WMButton1")
 	else
 		if draw.drawbutton == nil and draw.clearbutton == nil and draw.changeColor_button == nil then
