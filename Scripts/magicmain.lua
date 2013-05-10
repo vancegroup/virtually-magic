@@ -3,20 +3,17 @@ require("TransparentGroup")
 require("getScriptFilename")
 vrjLua.appendToModelSearchPath(getScriptFilename())
 
-dofile(vrjLua.findInModelSearchPath([[Effects/Navigation_WalkandFly.lua]]))
-dofile(vrjLua.findInModelSearchPath([[Effects/rotateWand.lua]]))
+dofile(vrjLua.findInModelSearchPath([[Effects/Navigation.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/lumos.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/hiddenSwitch.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/snitchmove.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/painting_move.lua]]))
 dofile(vrjLua.findInModelSearchPath([[BackgroundSound.lua]]))
-dofile(vrjLua.findInModelSearchPath([[Effects/help.lua]]))
+--dofile(vrjLua.findInModelSearchPath([[Effects/help.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/Drawing.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/maze_help.lua]]))
 
-local device = gadget.PositionInterface("VJWand")
-
-startBackgroundSound()
+--startBackgroundSound()
 mydraw = DrawingTool{}
 mydraw:startDrawing()
 
@@ -48,30 +45,24 @@ boggart = TransparentGroup{
 	dementor
 }
 
-updatepositionTrack = function()
-	while true do
-		track = RelativeTo.World:getInverseMatrix():preMult(device.position)
-		Actions.waitForRedraw()
-	end
-end
-
 ghostPresent = false
 
-ghostAppear = function()
-	while true do
-			if (track:x()> -13.3 and track:x()< -11.1 and track:z()< -10.5 and ghostPresent==false) then
-				RelativeTo.World:addChild(boggart)
-				print("Boo!")
-				ghostPresent = true
-				PlayDementor()
-				break
-			end
-		Actions.waitForRedraw()
+Actions.addFrameAction(
+	function()
+		while true do
+				if (track:x()> -13.3 and track:x()< -11.1 and track:z()< -10.5 and ghostPresent==false) then
+					RelativeTo.World:addChild(boggart)
+					print("Boo!")
+					ghostPresent = true
+					PlayDementor()
+					break
+				end
+			Actions.waitForRedraw()
+		end
+		Actions.addFrameAction(moveGhost)
+		print("Go!")
 	end
-	Actions.addFrameAction(moveGhost)
-	print("Go!")
-end
-
+)
 
 moveGhost = function(dt)
 	while true do
@@ -83,5 +74,18 @@ moveGhost = function(dt)
 	end
 end
 
-Actions.addFrameAction(updatepositionTrack)
-Actions.addFrameAction(ghostAppear)
+--[[ Action for returning to the starting position ]]
+Actions.addFrameAction(
+	function()
+		local toggle_button = gadget.DigitalInterface("WMButtonHome")
+		--local toggle_button = gadget.DigitalInterface("VJButton1")
+		while true do
+			repeat
+				Actions.waitForRedraw()
+			until toggle_button.justPressed
+				RelativeTo.World:setMatrix(osg.Matrixd.translate(10, 3.5, 0))
+				ghostPresent = false
+				RelativeTo.World:removeChild(boggart)
+		end
+	end
+)

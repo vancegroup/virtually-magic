@@ -3,8 +3,7 @@ require("TransparentGroup")
 require("getScriptFilename")
 vrjLua.appendToModelSearchPath(getScriptFilename())
 
-dofile(vrjLua.findInModelSearchPath([[Effects/Navigation_WalkandFly_METaL.lua]]))
-dofile(vrjLua.findInModelSearchPath([[Effects/rotateWand_METaL.lua]]))
+dofile(vrjLua.findInModelSearchPath([[Effects/Navigation_METaL.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/lumos_METaL.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/hiddenSwitch.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/snitchmove.lua]]))
@@ -13,8 +12,6 @@ dofile(vrjLua.findInModelSearchPath([[BackgroundSound.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/help.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/Drawing.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/maze_help.lua]]))
-
-local device = gadget.PositionInterface("VJWand")
 
 startBackgroundSound()
 mydraw = DrawingTool{metal = true}
@@ -48,13 +45,6 @@ boggart = TransparentGroup{
 	dementor
 }
 
-updatepositionTrack = function()
-	while true do
-		track = RelativeTo.World:getInverseMatrix():preMult(device.position)
-		Actions.waitForRedraw()
-	end
-end
-
 ghostPresent = false
 
 ghostAppear = function()
@@ -83,5 +73,20 @@ moveGhost = function(dt)
 	end
 end
 
-Actions.addFrameAction(updatepositionTrack)
 Actions.addFrameAction(ghostAppear)
+
+--[[ Action for returning to the starting position ]]
+Actions.addFrameAction(
+	function()
+		local toggle_button = gadget.DigitalInterface("WMButtonHome")
+		--local toggle_button = gadget.DigitalInterface("VJButton1")
+		while true do
+			repeat
+				Actions.waitForRedraw()
+			until toggle_button.justPressed
+				RelativeTo.World:setMatrix(osg.Matrixd.translate(10, 3.5, 0))
+				ghostPresent = false
+				RelativeTo.World:removeChild(boggart)
+		end
+	end
+)
