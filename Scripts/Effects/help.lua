@@ -3,12 +3,6 @@ require("getScriptFilename")
 fn = getScriptFilename()
 vrjLua.appendToModelSearchPath(fn)
 
--- (node here is the help menu)
--- local node_state = node:getOrCreateStateSet()
--- node_state:setRenderingHint(20) -- draw last?
--- node:setStateSet(node_state)
-
-
 wiihelp = Transform{
 	position={0,1.3,0},
 	orientation=AngleAxis(Degrees(-90), Axis{0.0,0.0,0.0}),
@@ -18,15 +12,19 @@ wiihelp = Transform{
 
 Actions.addFrameAction(
 	function()
-		--local device = gadget.DigitalInterface("WMButton2")
-		local device = gadget.DigitalInterface("VJButton1")
+		local device = gadget.DigitalInterface("WMButton2")
+		--local device = gadget.DigitalInterface("VJButton1")
 		while true do
 			repeat
 				Actions.waitForRedraw()
 			until device.justPressed
 				--Turn off Light on Object
+					-- local node_state = wiihelp:getOrCreateStateSet()
+					-- node_state:setRenderingHint(20) -- draw last?
+					-- wiihelp:setStateSet(node_state)
 				ss = wiihelp:getOrCreateStateSet()
 				ss:setMode(0x0B50,osg.StateAttribute.Values.OFF)
+
 				RelativeTo.Room:addChild(wiihelp)
 			repeat
 				Actions.waitForRedraw()
