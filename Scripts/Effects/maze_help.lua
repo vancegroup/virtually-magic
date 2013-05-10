@@ -22,7 +22,9 @@ Actions.addFrameAction(
 				ss = mazehelp:getOrCreateStateSet()
 				ss:setMode(0x0B50,osg.StateAttribute.Values.OFF)
 				RelativeTo.World:addChild(mazehelp)
-				Actions.waitSeconds(5)
+			repeat
+				Actions.waitForRedraw()
+			until helpBtn.justPressed
 				RelativeTo.World:removeChild(mazehelp)
 		end	
 	end
