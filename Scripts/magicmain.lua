@@ -75,6 +75,14 @@ end
 
 Actions.addFrameAction(ghostAppear)
 
+-- [[ Navigation set-up ]]
+myNav = FlyOrWalkNavigation{
+	start = "walking"
+	switchButton = gadget.DigitalInterface("WMButtonPlus"),
+	initiateRotationButton1 = gadget.DigitalInterface("WMButtonRight"),
+	initiateRotationButton2 = gadget.DigitalInterface("WMButtonLeft"),
+}
+
 --[[ Action for returning to the starting position ]]
 Actions.addFrameAction(
 	function()
