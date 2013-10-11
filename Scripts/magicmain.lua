@@ -3,18 +3,18 @@ require("TransparentGroup")
 require("getScriptFilename")
 vrjLua.appendToModelSearchPath(getScriptFilename())
 
-dofile(vrjLua.findInModelSearchPath([[Effects/Navigation.lua]]))
-dofile(vrjLua.findInModelSearchPath([[Effects/lumos.lua]]))
+dofile(vrjLua.findInModelSearchPath([[Effects/Navigation_METaL.lua]]))
+dofile(vrjLua.findInModelSearchPath([[Effects/lumos_METaL.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/hiddenSwitch.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/snitchmove.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/painting_move.lua]]))
 dofile(vrjLua.findInModelSearchPath([[BackgroundSound.lua]]))
---dofile(vrjLua.findInModelSearchPath([[Effects/help.lua]]))
+dofile(vrjLua.findInModelSearchPath([[Effects/help.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/Drawing.lua]]))
 dofile(vrjLua.findInModelSearchPath([[Effects/maze_help.lua]]))
 
---startBackgroundSound()
-mydraw = DrawingTool{}
+startBackgroundSound()
+mydraw = DrawingTool{metal = true}
 mydraw:startDrawing()
 
 roomRequirement = Transform{
@@ -47,22 +47,21 @@ boggart = TransparentGroup{
 
 ghostPresent = false
 
-Actions.addFrameAction(
-	function()
-		while true do
-				if (track:x()> -13.3 and track:x()< -11.1 and track:z()< -10.5 and ghostPresent==false) then
-					RelativeTo.World:addChild(boggart)
-					print("Boo!")
-					ghostPresent = true
-					PlayDementor()
-					break
-				end
-			Actions.waitForRedraw()
-		end
-		Actions.addFrameAction(moveGhost)
-		print("Go!")
+ghostAppear = function()
+	while true do
+			if (track:x()> -13.3 and track:x()< -11.1 and track:z()< -10.5 and ghostPresent==false) then
+				RelativeTo.World:addChild(boggart)
+				print("Boo!")
+				ghostPresent = true
+				PlayDementor()
+				break
+			end
+		Actions.waitForRedraw()
 	end
-)
+	Actions.addFrameAction(moveGhost)
+	print("Go!")
+end
+
 
 moveGhost = function(dt)
 	while true do
@@ -73,6 +72,8 @@ moveGhost = function(dt)
 		Actions.waitForRedraw()
 	end
 end
+
+Actions.addFrameAction(ghostAppear)
 
 --[[ Action for returning to the starting position ]]
 Actions.addFrameAction(

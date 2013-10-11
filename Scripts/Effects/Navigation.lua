@@ -1,13 +1,9 @@
---New Navigation which encompasses flying, walking, and rotation for desktop computer. 
---Alicia Fleege 5-7-2013
-
 require("Actions")
+local FlyOrWalkNavigationIndex = { isFlyOrWalkNavigation = true }
+local FlyOrWalkNavigationMT = {__index = FlyOrWalkNavigationIndex}
+--disable current VRJuggLua navigation
 
-osgnav.removeStandardNavigation()
-
---Change starting location of application (not needed if used in other applications)
-RelativeTo.World:setMatrix(osg.Matrixd.translate(10, 3.5, 0))
-
+--helper functions (not sure what to do with yet)
 local getRoomToWorld = function()
 	return RelativeTo.World:getInverseMatrix()
 end
@@ -17,134 +13,143 @@ local transformPointRoomToWorld = function(v)
 end
 
 local transformDirectionRoomToWorld = function(v)
-	return getRoomToWorld():preMult(osg.Vec4d(v,0))
+	return getRoomToWorld():preMult(osg.Vec4d(v, 0))
 end
 
---Update the position of the tracked wii-mote
-local device = gadget.PositionInterface("VJWand")
-updatepositionTrack = function()
-	while true do
-		track = RelativeTo.World:getInverseMatrix():preMult(device.position)
-		Actions.waitForRedraw()
+function FlyOrWalkNavigationIndex:startWalking()
+	Actions.removeFrameAction(self.flying_frame_action_marker)
+	if self.dropToGroundWhenWalking then
+		local world_height = RelativeTo.World:getMatrix():getTrans():y()
+		RelativeTo.World:preMult(osg.Matrixd.translate(0, -world_height, 0))
 	end
-end
-Actions.addFrameAction(updatepositionTrack)
-
---Function for walking in scene
-walking_nav = function(dt)
-	local wand = gadget.PositionInterface('VJWand')
-	local device = gadget.DigitalInterface("VJButton0")
-	local dt = dt
-	local rate = 1.5
-	while true do
-		repeat
-			dt = Actions.waitForRedraw()
-		until device.pressed
-		while device.pressed do
-			dt = Actions.waitForRedraw()
-			-- Post-mult here does our movement in the room frame before the rest of the transform
-			RelativeTo.World:postMult(osg.Matrixd.translate(-wand.forwardVector:x()*rate*dt,0,-wand.forwardVector:z()*rate*dt))
-		end
-	end
-
-end
-Actions.addFrameAction(walking_nav)
-
---Function for flying in scene
-fly_nav = function(dt)
-	local wand = gadget.PositionInterface('VJWand')
-	local device = gadget.DigitalInterface("VJButton0")
-	local dt = dt
-	local rate = 1.5
-	while true do
-		repeat
-			dt = Actions.waitForRedraw()
-		until device.pressed
-		while device.pressed do
-			dt = Actions.waitForRedraw()
-			-- Post-mult here does our movement in the room frame before the rest of the transform
-			RelativeTo.World:postMult(osg.Matrixd.translate(-wand.forwardVector*rate*dt))
-		end
-	end
-end
-	
---Functions for switching between navigation styles. 
-function switchNavigationFromWalkingToFlying()
-	Actions.removeFrameAction(walking_nav2)
-	fly_nav2 = Actions.addFrameAction(fly_nav)
-end
-function switchNavigationFromFlyingToWalking()
-	Actions.removeFrameAction(fly_nav2)
-	--Function Returns User to the floor based on the height value obtained while using walking navigation.
-	RelativeTo.World:preMult(osg.Matrixd.translate(0, track:y()-height, 0))
-	walking_nav2 = Actions.addFrameAction(walking_nav)
+	self.walking_frame_action_marker = Actions.addFrameAction(self.walk_frame_action)
+	print("FlyOrWalkNavigation: Walking Mode Started")
 end
 
---FrameAction for using the wii-mote to switch between navigation styles. 
-Actions.addFrameAction(
-	function()
-		local toggle_button = gadget.DigitalInterface("VJButton1")
-		while true do
-			repeat
-				Actions.waitForRedraw()
-				height = track:y()
-			until toggle_button.justPressed
-				switchNavigationFromWalkingToFlying()
-			repeat
-				Actions.waitForRedraw()
-			until toggle_button.justPressed
-				switchNavigationFromFlyingToWalking()
-		end
-	end
-)
-
---Update the position of the tracked head
-local head = gadget.PositionInterface("VJHead")
-updateposTrack = function()
-	while true do
-		trackhead = RelativeTo.World:getInverseMatrix():preMult(head.position)
-		Actions.waitForRedraw()
-	end
+function FlyOrWalkNavigationIndex:startFlying()
+	Actions.removeFrameAction(self.walking_frame_action_marker)
+	self.flying_frame_action_marker = Actions.addFrameAction(self.fly_frame_action)
+	print("FlyOrWalkNavigation: Flying Mode Started")
 end
-Actions.addFrameAction(updateposTrack)
 
---Add Rotation to the Scene
-Actions.addFrameAction(
-	function(dt)
-		local wand = gadget.PositionInterface("VJWand")
-		local device = gadget.DigitalInterface("VJButton2")
-		local dt = dt
-		local rate = .5
+function FlyOrWalkNavigationIndex:addSwitchButtonActionFrame()
+	Actions.addFrameAction(self.switch_frame_action)
+end
+
+function FlyOrWalkNavigationIndex:startRotating()
+	self.rotation_frame_action_maker = Actions.addFrameAction(self.rotation_frame_action)
+end
+
+function FlyOrWalkNavigationIndex:stopRotating()
+	Actions.removeFrameAction(self.rotation_frame_action_maker)
+end
+
+function FlyOrWalkNavigationIndex:setup()
+	self.walk_frame_action = function(dt)
 		while true do
 			repeat
 				dt = Actions.waitForRedraw()
-			until device.pressed
-			
-			local wandForward = osg.Vec3d(wand.forwardVector:x(),0,wand.forwardVector:z())
-			local rotateMax = osg.Quat()
-			local incRotate = osg.Quat()
-
-			while device.pressed do
-				-- first, wait for next frame
+			until self.moveButton.pressed
+			while self.moveButton.pressed do
 				dt = Actions.waitForRedraw()
-				
-				-- See where they point now.
-				local newForwardVec = osg.Vec3d(wand.forwardVector:x(),0,wand.forwardVector:z())
-				
-				-- Try to make those pointing places the same - rotate one to the other
-				rotateMax:makeRotate(newForwardVec, wandForward)
-				
-				-- slerp scales our incremental rotation by dt
-				incRotate:slerp(dt * rate, osg.Quat(), rotateMax)
-				
+				RelativeTo.World:postMult(osg.Matrixd.translate(-self.device.forwardVector:x() * self.rate * dt, 0, -self.device.forwardVector:z() * self.rate * dt))
+			end
+		end
+	end
+	self.fly_frame_action = function(dt)
+		while true do
+			repeat
+				dt = Actions.waitForRedraw()
+			until self.moveButton.pressed
+			while self.moveButton.pressed do
+				dt = Actions.waitForRedraw()
+				RelativeTo.World:postMult(osg.Matrixd.translate(-self.device.forwardVector * self.rate * dt))
+			end
+		end
+	end
+	if self.start == "flying" then
+		self.switch_frame_action = function()
+			while true do
+				repeat
+					Actions.waitForRedraw()
+				until self.switchButton.justPressed
+				self:startWalking()
+				repeat
+					Actions.waitForRedraw()
+				until self.switchButton.justPressed
+				self:startFlying()
+			end
+		end
+		self:startFlying()
+	else --if not flying then walking
+		self.switch_frame_action = function()
+			while true do
+				repeat
+					Actions.waitForRedraw()
+				until self.switchButton.justPressed
+				self:startFlying()
+				repeat
+					Actions.waitForRedraw()
+				until self.switchButton.justPressed
+				self:startWalking()
+			end
+		end
+		self:startWalking()
+	end
+	self.rotation_frame_action = function()
+		local function getWandForwardVectorWithoutY()
+			return osg.Vec3d(self.device.forwardVector:x(), 0, self.device.forwardVector:z())
+		end
+		while true do
+			repeat
+				dt = Actions.waitForRedraw()
+			until self.initiateRotationButton1.pressed or self.initiateRotationButton2.pressed
+
+			local initialWandForwardVector = getWandForwardVectorWithoutY()
+			local maximumRotation = osg.Quat()
+			local incrementalRotation = osg.Quat()
+
+			while self.initiateRotationButton1.pressed or self.initiateRotationButton2.pressed do
+				local dt = Actions.waitForRedraw()
+				local newForwardVec = getWandForwardVectorWithoutY()
+				maximumRotation:makeRotate(newForwardVec, initialWandForwardVector)
+				incrementalRotation:slerp(dt * self.rotRate, osg.Quat(), maximumRotation)
+				local newHeadPosition = RelativeTo.World:getInverseMatrix():preMult(self.head.position)
 				local deltaMatrix = osg.Matrixd()
-				deltaMatrix:preMult(osg.Matrixd.translate(trackhead))
-				deltaMatrix:preMult(osg.Matrixd.rotate(incRotate))
-				deltaMatrix:preMult(osg.Matrixd.translate(-trackhead))
-
+				deltaMatrix:preMult(osg.Matrixd.translate(newHeadPosition))
+				deltaMatrix:preMult(osg.Matrixd.rotate(incrementalRotation))
+				deltaMatrix:preMult(osg.Matrixd.translate(-newHeadPosition))
 				RelativeTo.World:preMult(deltaMatrix)
 			end
 		end
-	
 	end
-)
+end
+
+FlyOrWalkNavigation = function(nav)
+	print("FlyOrWalkNavigation: removing standard navigation...")
+	osgnav.removeStandardNavigation()
+	nav.start = nav.start or "flying"
+	nav.dropToGroundWhenWalking = nav.dropToGroundWhenWalking or true
+	nav.rate = nav.rate or 1.5
+	nav.rotRate = nav.rotRate or .5
+	nav.device = nav.device or gadget.PositionInterface('VJWand')
+	nav.moveButton = nav.moveButton or gadget.DigitalInterface("VJButton0")
+	nav.head = nav.head or gadget.PositionInterface("VJHead")
+	setmetatable(nav, FlyOrWalkNavigationMT)
+	nav:setup()
+
+	if nav.switchButton ~= nil then
+		nav:addSwitchButtonActionFrame()
+	else
+		print("FlyOrWalkNavigation: No switchButton provided, won't be able to switch to walking mode")
+	end
+
+	if nav.initiateRotationButton1 ~= nil then
+		nav.initiateRotationButton2 = nav.initiateRotationButton2 or nav.initiateRotationButton1
+		nav:startRotating()
+	else
+		print("FlyOrWalkNavigation: No initiateRotationButton1 provided, you won't be able to rotate")
+	end
+
+	return nav
+end
