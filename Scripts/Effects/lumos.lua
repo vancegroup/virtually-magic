@@ -39,7 +39,7 @@ lightsource4:setLight(light4)
 light1:setAmbient(osg.Vec4(0.1, 0.1, 0.1, .5))
 --Set directed lighting to higher intensity
 light2:setAmbient(osg.Vec4(.6,.9,1,.5))
---Set regular background to lower intensity
+--Set regular background to higher intensity
 light3:setAmbient(osg.Vec4(.3, .3, 0.3, 1))
 light4:setAmbient(osg.Vec4(.3, .3, 0.3, 1))
 
@@ -73,7 +73,7 @@ RelativeTo.World:addChild(lightsource1)
 RelativeTo.World:addChild(lightsource3)
 RelativeTo.World:addChild(lightsource4)
 
---Set width of beam of spotlight
+--Set width of beam of directed light
 --90 yeilds half sphere, 20 yeilds narrow beam
 light2:setSpotCutoff(6)
 --Set definition of beam edge
@@ -82,7 +82,6 @@ light2:setSpotExponent(100)
 RelativeTo.World:addChild(lightsource2)
 
 updateposTrack = function()
-	local device = gadget.PositionInterface("VJWand")
 	while true do
 		local track = RelativeTo.World:getInverseMatrix():preMult(device.position)
 		light2:setPosition(osg.Vec4(track:x(),track:y(),track:z(),1))
@@ -93,8 +92,8 @@ end
 Actions.addFrameAction(updateposTrack)
 
 lightONandOFF = function()
-	local drawBtn = gadget.DigitalInterface("VJButton1")
-	-- local drawBtn = gadget.DigitalInterface("WMButtonUp")
+	--local drawBtn = gadget.DigitalInterface("VJButton1")
+	local drawBtn = gadget.DigitalInterface("WMButtonUp")
 	while true do
 		-- keep drawing scene until button pressed
 		repeat
