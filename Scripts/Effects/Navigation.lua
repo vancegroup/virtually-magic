@@ -20,7 +20,7 @@ function FlyOrWalkNavigationIndex:startWalking()
 	Actions.removeFrameAction(self.flying_frame_action_marker)
 	if self.dropToGroundWhenWalking then
 		local world_height = RelativeTo.World:getMatrix():getTrans():y()
-		RelativeTo.World:preMult(osg.Matrixd.translate(0, -world_height, 0))
+		RelativeTo.World:preMult(osg.Matrixd.translate(0, 3.5 -world_height, 0))
 	end
 	self.walking_frame_action_marker = Actions.addFrameAction(self.walk_frame_action)
 	print("FlyOrWalkNavigation: Walking Mode Started")
