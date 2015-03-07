@@ -80,3 +80,5 @@ end
 function offDraw()
 	draw:stop()
 end
+
+startBackgroundSound()
