@@ -1,39 +1,21 @@
-require("Actions")
-require("getScriptFilename")
-fn = getScriptFilename()
-vrjLua.appendToModelSearchPath(fn)
-
-dofile(vrjLua.findInModelSearchPath([[MoveTools.lua]]))
-
-painting = Transform{
-	position={0,-.4,0},
-	orientation=AngleAxis(Degrees(-90), Axis{0.0,0.0,0.0}),
-	scale=.5,
-	Model([[../../Hogwarts Models/OSG/Room of Requirement/ladypainting.ive]]),
-}
-RelativeTo.World:addChild(painting)
-
-painting_move = function()
-	return function()
-		while true do
-				if ((track:x()> 2 and track:x()< 4 and track:z()> -21.5 and track:z()< -17 and (((painting:getPosition()):z())>-3))) then
-					newPos = osg.Vec3d(-.01,-.4,-3)
-					newPos = newPos - painting:getPosition()
-					PlayPainting()
-					func = Transformation.move_slow(painting,.2,newPos:x(),newPos:y(),newPos:z())
-					func()
-					Actions.waitForRedraw()
-				elseif ((track:x()< 2 and track:z()< -21.5 and (((painting:getPosition()):z())<-2.9))) then
-					newPos = osg.Vec3d(0,-.4,0)
-					newPos = newPos - painting:getPosition()
-					PlayPainting()
-					func = Transformation.move_slow(painting,.2,newPos:x(),newPos:y(),newPos:z())
-					func()
-					Actions.waitForRedraw()
-				end
+Actions.addFrameAction(function()
+	while true do
+		local wandPos = RelativeTo.World:getInverseMatrix():preMult(device.position)
+		if ((wandPos:x()> 2 and wandPos:x()< 4 and wandPos:z()> -21.5 and wandPos:z()< -17 and (((painting:getPosition()):z())>-3))) then
+			newPos = osg.Vec3d(-.01,-.4,-3)
+			newPos = newPos - painting:getPosition()
+			PlayPainting()
+			func = Transformation.move_slow(painting,.2,newPos:x(),newPos:y(),newPos:z())
+			func()
+			Actions.waitForRedraw()
+		elseif ((wandPos:x()< 2 and wandPos:z()< -21.5 and (((painting:getPosition()):z())<-2.9))) then
+			newPos = osg.Vec3d(0,-.4,0)
+			newPos = newPos - painting:getPosition()
+			PlayPainting()
+			func = Transformation.move_slow(painting,.2,newPos:x(),newPos:y(),newPos:z())
+			func()
 			Actions.waitForRedraw()
 		end
+		Actions.waitForRedraw()
 	end
-end
-
-Actions.addFrameAction(painting_move())
+end)
